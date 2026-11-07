@@ -31,7 +31,7 @@ function policy(hosts) {
 
 test('normalizeHost reduces a pasted URL to the TLS hostname', () => {
   const { normalizeHost } = policy([{ host: 'example.com' }]);
-  assert.equal(normalizeHost('https://NEWAPI.example.com:8443/v1/chat?x=1'), 'newapi.example.com');
+  assert.equal(normalizeHost('https://GATEWAY.example.com:8443/v1/chat?x=1'), 'gateway.example.com');
   assert.equal(normalizeHost('  example.com:443  '), 'example.com');
   assert.equal(normalizeHost(undefined), '');
 });

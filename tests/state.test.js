@@ -8,7 +8,7 @@ import { loadHosts, normalizeHost, saveHosts, toList } from '../src/host/state.j
 
 test('normalizeHost reduces URLs, ports and case to a hostname', () => {
   assert.equal(normalizeHost('gateway.example.com'), 'gateway.example.com');
-  assert.equal(normalizeHost('  gateway.example.com  '), 'gateway.example.com');
+  assert.equal(normalizeHost('  GATEWAY.Example.COM  '), 'gateway.example.com');
   assert.equal(normalizeHost('https://gateway.example.com'), 'gateway.example.com');
   assert.equal(normalizeHost('https://gateway.example.com/v1'), 'gateway.example.com');
   assert.equal(normalizeHost('http://gateway.example.com:8080/v1/models?x=1'), 'gateway.example.com');
@@ -60,7 +60,7 @@ test('loadHosts normalizes stored entries and defaults a missing flag to trusted
     file,
     JSON.stringify({
       version: 1,
-      hosts: [{ host: 'HTTPS://gateway.example.com:443/v1' }, { host: 'other.example', skipVerify: false }]
+      hosts: [{ host: 'HTTPS://Gateway.Example.com:443/v1' }, { host: 'other.example', skipVerify: false }]
     })
   );
   const loaded = loadHosts(file);
