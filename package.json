@@ -7,7 +7,7 @@
   "author": "spark-ai-boy",
   "repository": {
     "type": "git",
-    "url": "https://github.com/spark-ai-boy/dsh-tls-trust-anchor.git"
+    "url": "git+https://github.com/spark-ai-boy/dsh-tls-trust-anchor.git"
   },
   "homepage": "https://github.com/spark-ai-boy/dsh-tls-trust-anchor#readme",
   "bugs": {
