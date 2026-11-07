@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "TLS trust anchor",
+    "description": "Trusts a private or self-signed certificate for selected hosts, so a model provider behind one connects instead of failing with a certificate error."
+  }
+}

@@ -1,0 +1,4 @@
+- insert:
+    - id: tls-trust-anchor
+      name: 'dsh-tls-trust-anchor'
+      config: {}

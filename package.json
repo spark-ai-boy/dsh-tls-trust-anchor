@@ -1,0 +1,66 @@
+{
+  "name": "dsh-tls-trust-anchor",
+  "version": "0.1.0",
+  "description": "Certificate trust for DeepSeek Harness: a Settings section that skips TLS certificate verification for a specific host, so a private model gateway behind a self-signed certificate connects.",
+  "type": "module",
+  "license": "MIT",
+  "author": "spark-ai-boy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spark-ai-boy/dsh-tls-trust-anchor.git"
+  },
+  "homepage": "https://github.com/spark-ai-boy/dsh-tls-trust-anchor#readme",
+  "bugs": {
+    "url": "https://github.com/spark-ai-boy/dsh-tls-trust-anchor/issues"
+  },
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "plugin",
+    "tls",
+    "certificate",
+    "self-signed",
+    "llm-gateway"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "src/host/*.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "LICENSE",
+    "README.md",
+    "README.zh.md"
+  ],
+  "engines": {
+    "dsh": ">=0.2.1-rc.5"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\"",
+    "check": "node --check index.js && node --check client.js && node --test \"tests/*.test.js\"",
+    "prepublishOnly": "npm run check"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
+}

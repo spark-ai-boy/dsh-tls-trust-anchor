@@ -1,0 +1,71 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Required for npm Trusted Publishing: the workflow exchanges this OIDC token
+  # for a short-lived publish credential, so no NPM_TOKEN secret is stored.
+  id-token: write
+
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish dsh-tls-trust-anchor
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org/
+
+      # Trusted Publishing requires npm >= 11.5.1. The runner's bundled npm
+      # is not guaranteed to be new enough.
+      - name: Upgrade npm for Trusted Publishing
+        run: npm install -g npm@11.5.1
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Verify tag matches package version
+        if: github.ref_type == 'tag'
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="${GITHUB_REF_NAME#v}"
+          if [ "$VERSION" != "$TAG" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $VERSION."
+            exit 1
+          fi
+
+      - name: Check whether this version is already on npm
+        id: registry
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "dsh-tls-trust-anchor@$VERSION" version \
+            --registry=https://registry.npmjs.org/ \
+            --prefer-online >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "dsh-tls-trust-anchor@$VERSION is already published; skipping."
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check
+        run: npm run check
+
+      - name: Publish with Trusted Publishing
+        if: steps.registry.outputs.published != 'true'
+        run: npm publish --access public
