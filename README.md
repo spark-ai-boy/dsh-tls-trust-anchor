@@ -19,7 +19,8 @@ A self-signed leaf certificate (`Basic Constraints: CA:FALSE`) cannot act as a t
 ## What it does
 
 - **Per-host switch** — add `newapi.example.com`, decide whether to skip verification for it, remove it again. The decision applies to that host only.
-- **Nothing global** — no environment variables, no certificate store edits, no other application affected. Every other connection keeps standard verification: expiry, unknown roots, and hostname mismatches are all still rejected.
+- **Only that host** — no certificate store edits, no other application affected. Every other connection keeps standard verification: expiry, unknown roots, and hostname mismatches are all still rejected.
+- **Child processes too** — while the plugin is active it appends a `--require` preload to `NODE_OPTIONS`, so Node children the Harness spawns (a model gateway proxy that runs on its own, for example) follow the same per-host policy.
 - **Persisted** — the list lives in `~/.dsh/tls-trust/trusted-hosts.json` and survives restarts.
 - **Live** — the Host patches `tls.connect` for the Harness runtime; the switch takes effect on the next request, without a restart.
 
@@ -57,6 +58,7 @@ Removing a host from the list immediately restores standard verification for it 
 | Host (`index.js`) | Reads the persisted list, patches `tls.connect` inside the Harness runtime, and serves the `tlsTrust` Remote service |
 | Client (`client.js`) | Registers a `settings.section` row and renders the list, switch, and delete button |
 | State (`src/host/state.js`) | Hostname normalisation and JSON persistence |
+| Preload (`src/host/preload.cjs`) | Enters child processes through `NODE_OPTIONS=--require`, reads the same list, and patches per host |
 
 Only connections whose `servername`/`host` matches a trusted entry get `rejectUnauthorized: false`. Everything else is passed through untouched.
 
@@ -64,6 +66,7 @@ Only connections whose `servername`/`host` matches a trusted entry get `rejectUn
 
 - The Host half imports `@deepseek-ai/dsh-typert-protocol`, which the Harness installation provides. It is not bundled.
 - Remote method parameter names are read from Host source when no generated Typert artifact is present, so the names in `client.js` descriptors must match the Host method signatures verbatim.
+- A child process only inherits the policy if it starts **after** the plugin activated; a long-running process that predates it needs one restart.
 
 ## Development
 

@@ -1,6 +1,6 @@
 {
   "name": "dsh-tls-trust-anchor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Certificate trust for DeepSeek Harness: a Settings section that skips TLS certificate verification for a specific host, so a private model gateway behind a self-signed certificate connects.",
   "type": "module",
   "license": "MIT",
@@ -32,6 +32,7 @@
     "index.js",
     "client.js",
     "src/host/*.js",
+    "src/host/*.cjs",
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
