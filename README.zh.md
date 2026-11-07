@@ -4,6 +4,8 @@
 
 [English](README.md)
 
+[![npm version](https://img.shields.io/npm/v/dsh-tls-trust-anchor)](https://www.npmjs.com/package/dsh-tls-trust-anchor)[![GitHub stars](https://img.shields.io/github/stars/spark-ai-boy/dsh-tls-trust-anchor?style=social)](https://github.com/spark-ai-boy/dsh-tls-trust-anchor)
+
 ## 要解决的问题
 
 Node.js 用自己的 **CA 库**校验证书，从不读取 macOS 或 Windows 的系统信任存储。所以 Safari、Chrome 或 Bun 写的 CLI 能接受的证书，在 Harness 运行时里仍然可能被拒绝：

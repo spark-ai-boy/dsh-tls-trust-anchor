@@ -4,6 +4,8 @@ Adds a **Certificate trust** section to DeepSeek Harness Settings where a host c
 
 [中文](README.zh.md)
 
+[![npm version](https://img.shields.io/npm/v/dsh-tls-trust-anchor)](https://www.npmjs.com/package/dsh-tls-trust-anchor)[![GitHub stars](https://img.shields.io/github/stars/spark-ai-boy/dsh-tls-trust-anchor?style=social)](https://github.com/spark-ai-boy/dsh-tls-trust-anchor)
+
 ## The problem
 
 Node.js verifies TLS with its **own** CA store. It never reads the macOS or Windows system trust store, so a certificate that Safari, Chrome, or a Bun-based CLI accepts can still be rejected inside the Harness runtime:
